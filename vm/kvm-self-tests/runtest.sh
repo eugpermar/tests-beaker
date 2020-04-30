@@ -307,14 +307,7 @@ function setup
     fi
 
     rlRun "cd $TMPDIR"
-    if [ -x /usr/bin/dnf ]; then
-        dnf download ${pkg} --source
-    elif [ -x /usr/bin/yum ]; then
-        yum download ${pkg} --source
-    fi
-    if [ ! -f $TMPDIR/${pkg}.src.rpm ]; then
-        rlFetchSrcForInstalled $pkg
-    fi
+    rlFetchSrcForInstalled $pkg
     typeset rpmfile=$(ls -1 $TMPDIR/${pkg}.src.rpm)
     rlAssertExists $rpmfile
     rlRun "ls -l $rpmfile"
