@@ -1,7 +1,7 @@
 From 60720b93787ada85fffdc29877d5409627aea905 Mon Sep 17 00:00:00 2001
 From: "Michael S. Tsirkin" <mst@redhat.com>
 Date: Wed, 19 Dec 2018 18:21:51 -0500
-Subject: [PATCH 3/3] virtio: fix test build after uio.h change
+Subject: [PATCH 3/6] virtio: fix test build after uio.h change
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit

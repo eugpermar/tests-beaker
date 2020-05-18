@@ -1,7 +1,7 @@
 From 31c1c0e0da6f4203101a29bb288816ce0a558d4d Mon Sep 17 00:00:00 2001
 From: "Michael S. Tsirkin" <mst@redhat.com>
 Date: Thu, 26 Sep 2019 13:43:10 -0400
-Subject: [PATCH 2/3] tools/virtio: more stubs
+Subject: [PATCH 2/6] tools/virtio: more stubs
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
