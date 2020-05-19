@@ -1,0 +1,26 @@
+From 117e0ece7fa2f3dd8dcd96d02376c4fc28972d01 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>
+Date: Tue, 19 May 2020 15:49:38 +0200
+Subject: [PATCH] tools: Add linux/kabi.h stub
+
+---
+ tools/include/linux/rh_kabi.h | 7 +++++++
+ 1 file changed, 7 insertions(+)
+ create mode 100644 tools/include/linux/rh_kabi.h
+
+diff --git a/tools/include/linux/rh_kabi.h b/tools/include/linux/rh_kabi.h
+new file mode 100644
+index 000000000000..8fad5fd19732
+--- /dev/null
++++ b/tools/include/linux/rh_kabi.h
+@@ -0,0 +1,7 @@
++#ifndef _LINUX_RH_KABI_H
++#define _LINUX_RH_KABI_H
++
++#define RH_KABI_HIDE_INCLUDE(h) h
++#define RH_KABI_REPLACE(old, new) old;
++
++#endif /* _LINUX_RH_KABI_H */
+-- 
+2.18.1
+
