@@ -133,6 +133,7 @@ function runtest
 
     # Run tests
     rlRun -l './virtio_test'
+    rlRun -l './vringh_test'
     rlRun 'popd'
 
     rlPhaseEnd
@@ -191,7 +192,7 @@ function setup
     done
 
     rlRun "pushd '${LINUX_SRCDIR}/tools/virtio'"
-    rlRun 'make virtio_test mod'
+    rlRun 'make'
     rlRun 'insmod vhost_test/vhost_test.ko'
     rlRun 'popd'
 
