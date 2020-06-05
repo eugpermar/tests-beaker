@@ -73,58 +73,6 @@ function check_platform_support
     return 1
 }
 
-function check_virt_support
-{
-    declare -r hwpf=${1?"*** what hardware-platform?, e.g. x86_64"}
-    if [[ $hwpf == "x86_64" ]]; then
-        egrep -q '(vmx|svm)' /proc/cpuinfo
-        return $?
-    elif [[ $hwpf == "aarch64" ]]; then
-        dmesg | egrep -iq "kvm"
-        if (( $? == 0 )); then
-            dmesg | egrep -iq "kvm.*: (Hyp|VHE) mode initialized successfully"
-        else
-            #
-            # XXX: Note that the harness (i.e. beaker) does clear dmesg, hence
-            #      we have to fetch the output of kernel buffer from
-            #      "journalctl -k"
-            #
-            journalctl -k | \
-                egrep -iq "kvm.*: (Hyp|VHE) mode initialized successfully"
-        fi
-        return $?
-    elif [[ $hwpf == "ppc64" || $hwpf == "ppc64le" ]]; then
-        grep -q 'platform.*PowerNV' /proc/cpuinfo
-        return $?
-    elif [[ $hwpf == "s390x" ]]; then
-        grep -q 'features.*sie' /proc/cpuinfo
-        return $?
-    else
-        return 1
-    fi
-}
-
-function check
-{
-    # test is only supported on x86_64, aarch64, ppc64 and s390x
-    if check_platform_support "${HW_PLATFORM}"; then
-        rlLog "Running on supported arch (${HW_PLATFORM})"
-
-        # test can only run on hardware that supports virtualization
-        if check_virt_support "${HW_PLATFORM}"; then
-            rlLog 'Hardware supports virtualization, proceeding'
-        else
-            rlSkip "Skipping test, CPU doesn't support virtualization"
-            rstrnt-report-result $TEST SKIP $OUTPUTFILE
-            exit
-        fi
-    else
-        echo 'Skipping test, test is only supported on x86_64, aarch64, ppc64 or s390x'
-        rstrnt-report-result $TEST SKIP $OUTPUTFILE
-        exit
-    fi
-}
-
 function runtest
 {
     rlPhaseStartTest 'virtio_test'
@@ -141,24 +89,17 @@ function runtest
 
 function setup
 {
-    declare kvm_arch='' m tempdir
+    declare tempdir
     declare -ar patches=(patches/0*.patch)
 
     rlPhaseStartSetup
     check
 
-    if grep -wq 'vmx' /proc/cpuinfo; then
-        kvm_arch='kvm_intel'
-    elif grep -wq 'svm' /proc/cpuinfo; then
-        kvm_arch='kvm_amd'
-    fi
-    declare -ar modules=(kvm "$kvm_arch" vhost)
+    declare -ar modules=(vhost)
 
     # Reload all modules
-    rlRun "modprobe -r ${modules[*]}"
-    for m in "${modules[@]}"; do
-        rlRun "modprobe $m"
-    done
+    rlRun "modprobe -r vhost"
+    rlRun "modprobe vhost"
 
     tempdir=$(mktemp -d -p /var/tmp/)
     declare -r tempdir
